@@ -1,0 +1,25 @@
+As per:
+https://hackernoon.com/learn-to-manage-large-vue-js-components-in-4-min-64fc2b9b2ef9
+
+Use PascalCase file naming.
+ComponentName.vue
+
+Preface base components with a default word like App, Base or V.
+BaseTable.vue
+
+Components that are only used once should be prefixed with The:
+TheLargeComponent.vue
+
+Always use multi-word names for your components. Prefacing App or The simplifies this but do this for all components. This is to avoid clashes with standard HTML tags which are always a single word.
+MainModal.vue instead of Modal.vue 
+
+Child components should include their 
+parent name as a prefix. For example if you 
+would like a “Photo” component used in the “UserCard” 
+you will name it “UserCardPhoto”. 
+It’s for better readability since files in a 
+folder are usually order alphabetically.
+
+Always use full name instead of abbreviation in the name 
+of your components. For example don’t use “UDSettings”, 
+use instead “UserDashboardSettings”.
