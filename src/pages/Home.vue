@@ -36,9 +36,12 @@
       <div class="dropbox-section" v-show="step == 3">
         <!-- <label>Csv read successfully</label> -->
         <button class="sync-button" @click="whenSyncClicked" type="button">
-          <span v-show="!isStockPutLoading"
-            >Sync {{ selectedCompany.name }} stock</span
-          >
+          <span v-show="!isStockPutLoading">
+            Sync {{ selectedCompany.name }} stock
+            <div>
+              <b>{{ stock.length }} items</b>
+            </div>
+          </span>
           <span v-show="isStockPutLoading">uploading...</span>
         </button>
       </div>
@@ -57,7 +60,9 @@
 
     <div class="background">
       <div class="background-content">
-        <xmp id="json_output">{{ json_ui_output }}</xmp>
+        <xmp id="json_output" v-show="json_ui_output.length > 0">{{
+          JSON.stringify(json_ui_output, null, 2)
+        }}</xmp>
       </div>
     </div>
   </div>
@@ -81,7 +86,7 @@ const Vue = {
 
   computed: {
     json_ui_output() {
-      return JSON.stringify(this.stock, null, 2);
+      return this.stock;
     },
   },
 
@@ -118,8 +123,7 @@ const Vue = {
     },
 
     whenCompanySelect(company) {
-      this.stock = [];
-      this.selectedCompany = company || {};
+      this.selectedCompany = company;
       if (company && company._id && this.step < 2) {
         this.step = 2;
       }
@@ -142,33 +146,19 @@ const Vue = {
           let result = [];
 
           workbook.SheetNames.forEach(function (sheetName) {
-            const header = [];
-            const columnCount =
-              XLSX.utils.decode_range(workbook.Sheets[sheetName]["!ref"]).e.c +
-              1;
-
-            for (let i = 0; i < columnCount; ++i) {
-              header[i] =
-                workbook.Sheets[sheetName][`${XLSX.utils.encode_col(i)}1`].v;
-            }
-
             var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
               // header: 1,
               // dateNF: "FMT 14",
-              // defval: null,
+              // defval: "",
               raw: false,
               blankrows: false,
             });
 
-            if (roa.length)
-              result = {
-                headers: header,
-                records: roa,
-              };
+            if (roa.length) result = roa;
           });
 
           // in case something falls over, we still need error handling
-          if (result.headers.length > 0 && result.records.length > 0) {
+          if (result.length > 0) {
             this.stock = result;
             this.step = 3;
           }
@@ -286,17 +276,18 @@ export default Vue;
 
   .sync-button {
     font-family: inherit;
-    width: 10.75em;
+    min-width: 10.75em;
     border-radius: 1.25em;
     border: 1px solid #409fff;
     font-size: 1em;
     font-weight: 500;
     outline: 0;
     user-select: none;
-    line-height: 2em;
+    line-height: 1;
     vertical-align: top;
     display: inline-block;
     cursor: pointer;
+    padding: 8px 1em;
 
     //
     color: #fff;
