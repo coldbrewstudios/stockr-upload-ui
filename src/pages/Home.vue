@@ -99,7 +99,6 @@ const Vue = {
     step(cv) {
       if (cv === 1) {
         this.stock = [];
-        this.selectedCompany = {};
       }
     },
   },
