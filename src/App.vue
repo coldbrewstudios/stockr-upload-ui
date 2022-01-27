@@ -15,6 +15,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 h5 {
   margin: 0;
 }
@@ -22,10 +23,13 @@ p {
   margin: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #app {
+  /* max-width: 760px; */
   color: #4a4a4a;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* font-family: "Avenir", Helvetica, Arial, sans-serif; */
 }
 </style>

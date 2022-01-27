@@ -5,9 +5,8 @@
       <small>we support csv and xlsx</small>
       <br />
 
-      <div class="company_select">
+      <div class="dropbox-section company_select">
         <label for="companies">Choose a company</label>
-        <br />
         <select name="companies" id="companies" class="company-input">
           <option v-if="companies.length === 0">loading companies...</option>
           <option
@@ -21,10 +20,8 @@
         </select>
       </div>
 
-      <div v-show="step >= 1">
-        <br />
+      <div class="dropbox-section" v-show="step >= 1">
         <label>Choose a file</label>
-        <br />
         <input
           id="file_input"
           name="file"
@@ -35,31 +32,32 @@
         />
       </div>
 
-      <div v-show="step == 3">
-        <br />
-        <label>Csv read successfully</label>
-        <br />
+      <div class="dropbox-section" v-show="step == 3">
+        <!-- <label>Csv read successfully</label> -->
         <button class="sync-button" @click="whenSyncClicked" type="button">
           <span v-show="!isStockPutLoading"
-            >Click here to sync {{ selectedCompany.name }} stock</span
+            >Sync {{ selectedCompany.name }} stock</span
           >
           <span v-show="isStockPutLoading">uploading...</span>
         </button>
       </div>
 
-      <div v-show="step >= 4">
-        <br />
+      <div class="dropbox-section" v-show="step >= 4">
         <label style="color: green; font-weight: 600"
           >Csv upload / sync was successful</label
         >
         <br />
         <button class="sync-button" @click="step = 1" type="button">
-          Click here to upload another
+          <span>upload another?</span>
         </button>
       </div>
     </div>
 
-    <xmp id="json_output">{{ json_ui_output }}</xmp>
+    <div class="background">
+      <div class="background-content">
+        <xmp id="json_output">{{ json_ui_output }}</xmp>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -198,17 +196,56 @@ export default Vue;
 
 <style lang="scss">
 .page {
+  --font-color: #17181a;
+
   height: 100vh;
-  padding: 8%;
+  padding: 12% 18%;
+  display: flex;
+  flex-direction: column;
+
+  font-size: 16px;
+  color: var(--font-color);
 }
 
 .drop-container {
-  padding: 40px;
-  border: 2px solid #ebebeb;
+  --padding: 20px;
+  --blue: #409fff;
 
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1), 0 10px 30px 0 rgba(0, 0, 0, 0.2);
+  height: 25.625em;
+  left: 5em;
+  margin: -12.8125em 0 0;
+  position: absolute;
+  top: 50%;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  width: 17.5em;
+  z-index: 30;
+
+  padding: var(--padding);
+
+  label {
+    font-size: inherit;
+    line-height: 1;
+    display: block;
+  }
   h3 {
+    display: block;
     margin: 0;
+    font-size: 1.375em;
     font-weight: 400;
+    line-height: 1;
+  }
+
+  .dropbox-section {
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1;
+
+    border-top: 1px solid #babcbf;
+
+    padding: 0.65em 0.5em 0.7em 0.5em;
   }
 
   .company-input,
@@ -217,15 +254,58 @@ export default Vue;
     margin-top: 5px;
   }
 
-  .company_select {
-    padding-top: 10px;
+  .file-input {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
   }
-  .company_select label {
-    padding-bottom: 10px;
+
+  .sync-button {
+    font-family: inherit;
+    width: 10.75em;
+    border-radius: 1.25em;
+    border: 1px solid #409fff;
+    font-size: 1em;
+    font-weight: 500;
+    outline: 0;
+    user-select: none;
+    line-height: 2em;
+    vertical-align: top;
+    display: inline-block;
+
+    //
+    color: #fff;
+    background: #409fff;
+
+    span {
+      position: relative;
+      display: block;
+      top: -1px;
+    }
   }
+
   .company_select select.company_select {
     width: auto;
     min-width: 200px;
   }
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-left: 400px;
+  right: 0;
+  height: 100%;
+  display: flex;
+  top: 50%;
+  transform: translate(0, -50%);
+  transform: translate3d(0, -50%, 0);
+
+  background-color: #c1c7c2;
+  background-image: none;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>
