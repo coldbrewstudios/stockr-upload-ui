@@ -44,6 +44,10 @@
           </span>
           <span v-show="isStockPutLoading">uploading...</span>
         </button>
+
+        <p v-show="isStockPutError" style="color: red; margin-top: 8px">
+          There was an error uploading this sheet
+        </p>
       </div>
 
       <div class="dropbox-section" v-show="step >= 4">
@@ -82,6 +86,7 @@ const Vue = {
     step: 1,
     selectedCompany: {},
     isStockPutLoading: false,
+    isStockPutError: false,
   }),
 
   computed: {
@@ -103,23 +108,17 @@ const Vue = {
     GET_COMPANIES() {
       return http(`/companies`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
       })
         .then((res) => res.json())
         .catch(console.log);
     },
     INSERT_STOCK(company_id, stock_data) {
       return http(`/stock?company_id=${company_id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
         method: "PUT",
-        body: JSON.stringify(stock_data),
-      })
-        .then((res) => res.json())
-        .catch(console.log);
+        body: JSON.stringify({
+          records: stock_data,
+        }),
+      });
     },
 
     whenCompanySelect(company) {
@@ -173,12 +172,15 @@ const Vue = {
     whenSyncClicked() {
       this.isStockPutLoading = true;
       this.INSERT_STOCK(this.selectedCompany._id, this.stock)
-        .then(() => {
+        .then((res) => {
+          console.log(res);
           this.step = 4;
           this.isStockPutLoading = false;
+          this.isStockPutError = false;
         })
         .catch(() => {
           this.isStockPutLoading = false;
+          this.isStockPutError = true;
         });
     },
   },
@@ -196,11 +198,21 @@ const Vue = {
 };
 
 // api functions
-function http(url, options) {
+function http(url, options = {}) {
   const baseURL = process.env.VUE_APP_API_BASE_URI
     ? process.env.VUE_APP_API_BASE_URI
     : "https://booqnly-stockr.herokuapp.com";
-  return fetch(`${baseURL}/api/v1${url}`, options);
+  return fetch(`${baseURL}/api/v1${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    ...options,
+  }).then((response) => {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  });
 }
 
 // export
