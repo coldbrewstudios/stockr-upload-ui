@@ -174,6 +174,7 @@ const Vue = {
         });
     },
   },
+
   async mounted() {
     let file = document.getElementById("file_input");
     file.addEventListener("change", this.whenFileSelected);
