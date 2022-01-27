@@ -1,2 +1,5 @@
 # stockr-upload-ui
-Created with CodeSandbox
+
+Vue project
+Deployed to Netlify
+For Stockr stock updating via csv
