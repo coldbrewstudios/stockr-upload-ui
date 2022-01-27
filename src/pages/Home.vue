@@ -44,7 +44,8 @@
 
       <div class="dropbox-section" v-show="step >= 4">
         <label style="color: green; font-weight: 600"
-          >Csv upload / sync was successful</label
+          >Csv upload / sync was successful for
+          {{ stock.length }} records</label
         >
         <br />
         <button class="sync-button" @click="step = 1" type="button">
@@ -272,10 +273,15 @@ export default Vue;
     line-height: 2em;
     vertical-align: top;
     display: inline-block;
+    cursor: pointer;
 
     //
     color: #fff;
     background: #409fff;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
 
     span {
       position: relative;
