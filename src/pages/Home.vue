@@ -7,13 +7,17 @@
 
       <div class="dropbox-section company_select">
         <label for="companies">Choose a company</label>
-        <select name="companies" id="companies" class="company-input">
+        <select
+          name="companies"
+          id="companies"
+          class="company-input"
+          @change="whenCompanySelect"
+        >
           <option v-if="companies.length === 0">loading companies...</option>
           <option
             v-for="company in companies"
             :value="company._id"
             :key="company._id"
-            @click="whenCompanySelect(company)"
           >
             {{ company.name }}
           </option>
@@ -120,7 +124,10 @@ const Vue = {
       });
     },
 
-    whenCompanySelect(company) {
+    whenCompanySelect({ target }) {
+      const { value } = target;
+      const company = this.companies.find((c) => c._id === value);
+
       this.selectedCompany = company;
       if (company && company._id && this.step < 2) {
         this.step = 2;
