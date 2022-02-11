@@ -139,6 +139,7 @@ export default {
 
     if (!company_id) {
       this.error = "You need a company id to upload data";
+      this.isLoading = false;
     }
 
     if (company_id === "showspace_za") {
