@@ -27,6 +27,10 @@ p {
   box-sizing: border-box;
 }
 
+[mt-1] {
+  margin-top: 4px;
+}
+
 #app {
   /* max-width: 760px; */
   color: #4a4a4a;

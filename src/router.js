@@ -1,15 +1,15 @@
 import VueRouter from "vue-router";
 import Vue from "vue";
 
-import Home from "./pages/Home";
+import Upload from "./pages/Upload";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    name: "home",
+    name: "upload",
     path: "/",
-    component: Home
+    component: Upload
   }
 ];
 
