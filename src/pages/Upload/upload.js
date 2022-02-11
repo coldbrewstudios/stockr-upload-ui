@@ -27,6 +27,9 @@ export default {
     },
     isAdmin() {
       return this.company_id === "showspace_za";
+    },
+    selectedCompanyStockUrl() {
+      return `https://booqnly-stockr.herokuapp.com/api/v1/stock?company_id=${this.selectedCompany._id}`;
     }
   },
 

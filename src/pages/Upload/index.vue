@@ -82,6 +82,18 @@
           <span>upload another?</span>
         </button>
       </div>
+
+      <div class="dropbox-section bottom">
+        <p>
+          <b
+            >You stock is uploaded to this link, you can share it with your
+            resellers:</b
+          >
+        </p>
+        <a :href="selectedCompanyStockUrl" target="_blank">{{
+          selectedCompanyStockUrl
+        }}</a>
+      </div>
     </div>
 
     <div class="drop-container loading" v-show="isLoading"></div>
