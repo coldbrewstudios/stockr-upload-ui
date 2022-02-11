@@ -1,9 +1,10 @@
 <template>
   <div class="page">
     <div class="drop-container">
-      <div class="logo" v-show="selectedCompany.logo">
-        <img width="100%" :src="selectedCompany.logo" />
-      </div>
+      <div
+        class="logo"
+        :style="{ backgroundImage: `url(${selectedCompany.logo})` }"
+      ></div>
 
       <div class="intro">
         <h3 for="avatar">Upload your stocksheet</h3>
@@ -74,12 +75,9 @@
           Csv upload / sync was successful for
           {{ stock.records.length }} records
         </label>
-        <br />
-        find the data here:
 
-        <br />
         <button @click="step = 1" class="reset-button" type="button">
-          <span>upload another?</span>
+          <span>click to upload another</span>
         </button>
       </div>
 
