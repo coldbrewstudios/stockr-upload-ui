@@ -22,6 +22,7 @@
           name="companies"
           id="companies"
           class="company-input"
+          :value="selectedCompany._id"
           @change="whenCompanySelect"
         >
           <option v-if="companies.length === 0">loading companies...</option>
@@ -53,7 +54,7 @@
         </div>
       </div>
 
-      <div class="dropbox-section" v-show="step == 3">
+      <div class="dropbox-section" v-show="(step) => 3">
         <!-- <label>Csv read successfully</label> -->
         <button class="sync-button" @click="whenSyncClicked" type="button">
           <span v-show="!isStockPutLoading">
@@ -76,8 +77,8 @@
           {{ stock.records.length }} records
         </label>
 
-        <button @click="step = 1" class="reset-button" type="button">
-          <span>click to upload another</span>
+        <button @click="goToNextCompany" class="reset-button" type="button">
+          <span>upload next company</span>
         </button>
       </div>
 

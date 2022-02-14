@@ -1,4 +1,6 @@
 // http client (fetch wrapper)
+import axios from "axios";
+
 export function http(url = "", options = {}) {
   const baseURL = process.env.VUE_APP_API_BASE_URI
     ? process.env.VUE_APP_API_BASE_URI
@@ -8,14 +10,10 @@ export function http(url = "", options = {}) {
       "Content-Type": "application/json"
     },
     ...options
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response && response.json();
-    })
-    .catch((error) => {
-      return { error: error.message };
-    });
+  }).then(async (response) => {
+    if (!response.ok) {
+      throw Error({ error: await response.json() });
+    }
+    return response && response.json();
+  });
 }

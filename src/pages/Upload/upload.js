@@ -94,7 +94,6 @@ export default {
             var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
               // header: 1,
               // dateNF: "FMT 14",
-              // defval: "",
               raw: false,
               blankrows: false
             });
@@ -122,14 +121,29 @@ export default {
       this.isStockPutLoading = true;
       this.INSERT_STOCK(this.selectedCompany._id, this.stock)
         .then(async (res) => {
+          console.log("res", res);
           this.step = 4;
           this.isStockPutLoading = false;
           this.isStockPutError = false;
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log("error", error);
           this.isStockPutLoading = false;
           this.isStockPutError = true;
         });
+    },
+
+    goToNextCompany() {
+      this.step = 1;
+      const currentCompanyIndex = this.companies.findIndex(
+        (c) => c._id === this.selectedCompany._id
+      );
+      if (
+        currentCompanyIndex >= 0 &&
+        currentCompanyIndex !== this.companies.length - 1
+      ) {
+        this.selectedCompany = this.companies[currentCompanyIndex + 1];
+      }
     }
   },
 
