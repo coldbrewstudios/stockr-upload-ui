@@ -67,7 +67,7 @@
         </button>
 
         <p v-show="isStockPutError" style="color: red; margin-top: 8px">
-          There was an error uploading this sheet
+          {{ this.reqError }}
         </p>
       </div>
 

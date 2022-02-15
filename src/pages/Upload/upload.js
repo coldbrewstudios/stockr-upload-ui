@@ -18,7 +18,8 @@ export default {
     isStockPutLoading: false,
     isStockPutError: false,
     isLoading: true,
-    error: ""
+    error: "",
+    reqError: ""
   }),
 
   computed: {
@@ -66,6 +67,9 @@ export default {
       const { value } = target;
       const company = this.companies.find((c) => c._id === value);
 
+      this.error = "";
+      this.reqError = "";
+
       this.selectedCompany = company;
       if (company && company._id && this.step < 2) {
         this.step = 2;
@@ -77,6 +81,8 @@ export default {
       const fileLastModified = new Date(f.lastModified).toDateString();
 
       this.step = 2;
+      this.error = "";
+      this.reqError = "";
 
       if (f) {
         let r = new FileReader();
@@ -119,6 +125,9 @@ export default {
 
     whenSyncClicked() {
       this.isStockPutLoading = true;
+      this.error = "";
+      this.reqError = "";
+
       this.INSERT_STOCK(this.selectedCompany._id, this.stock)
         .then(async (res) => {
           console.log("res", res);
@@ -127,7 +136,7 @@ export default {
           this.isStockPutError = false;
         })
         .catch((error) => {
-          console.log("error", error);
+          this.reqError = error.message;
           this.isStockPutLoading = false;
           this.isStockPutError = true;
         });
@@ -135,6 +144,9 @@ export default {
 
     goToNextCompany() {
       this.step = 1;
+      this.error = "";
+      this.reqError = "";
+
       const currentCompanyIndex = this.companies.findIndex(
         (c) => c._id === this.selectedCompany._id
       );
