@@ -11,6 +11,7 @@ export default {
       lastModifiedDate: null, //date
       records: []
     },
+    file: null,
     company_id: null,
     companies: [],
     step: 1,
@@ -48,11 +49,17 @@ export default {
   methods: {
     GET_COMPANY(id) {
       return http(`/companies?company_id=${id}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
         method: "GET"
       });
     },
     GET_COMPANIES() {
       return http(`/companies`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
         method: "GET"
       });
     },
@@ -88,11 +95,38 @@ export default {
 
       if (f) {
         let r = new FileReader();
+
         r.onload = (e) => {
           const file = e.target.result;
-          // this.file = file;
+
+          const workbook = XLSX.read(file, {
+            type: "binary"
+          });
+
+          let records = [];
+
+          workbook.SheetNames.forEach(function (sheetName) {
+            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+              // header: 1,
+              // dateNF: "FMT 14",
+              raw: false,
+              blankrows: false
+            });
+
+            if (roa.length) records = roa;
+          });
+
+          // in case something falls over, we still need error handling
+          if (records.length > 0) {
+            this.stock = {
+              lastModifiedDate: fileLastModified,
+              records
+            };
+            this.step = 3;
+          }
         };
-        r.readAsArrayBuffer(f);
+
+        r.readAsBinaryString(f);
       } else {
         console.log("Failed to load file");
       }
@@ -104,7 +138,6 @@ export default {
       this.reqError = "";
 
       const formData = new FormData();
-      console.log("file", this.file);
       formData.append("file", this.file);
 
       this.INSERT_STOCK(this.selectedCompany._id, formData)
