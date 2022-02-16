@@ -56,10 +56,10 @@ export default {
         method: "GET"
       });
     },
-    INSERT_STOCK(company_id, stock_data) {
+    INSERT_STOCK(company_id, formData) {
       return http(`/stock?company_id=${company_id}`, {
         method: "PUT",
-        body: JSON.stringify(stock_data)
+        body: formData
       });
     },
 
@@ -84,40 +84,15 @@ export default {
       this.error = "";
       this.reqError = "";
 
+      this.file = f;
+
       if (f) {
         let r = new FileReader();
-
         r.onload = (e) => {
           const file = e.target.result;
-
-          const workbook = XLSX.read(file, {
-            type: "binary"
-          });
-
-          let records = [];
-
-          workbook.SheetNames.forEach(function (sheetName) {
-            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-              // header: 1,
-              // dateNF: "FMT 14",
-              raw: false,
-              blankrows: false
-            });
-
-            if (roa.length) records = roa;
-          });
-
-          // in case something falls over, we still need error handling
-          if (records.length > 0) {
-            this.stock = {
-              lastModifiedDate: fileLastModified,
-              records
-            };
-            this.step = 3;
-          }
+          // this.file = file;
         };
-
-        r.readAsBinaryString(f);
+        r.readAsArrayBuffer(f);
       } else {
         console.log("Failed to load file");
       }
@@ -128,9 +103,12 @@ export default {
       this.error = "";
       this.reqError = "";
 
-      this.INSERT_STOCK(this.selectedCompany._id, this.stock)
+      const formData = new FormData();
+      console.log("file", this.file);
+      formData.append("file", this.file);
+
+      this.INSERT_STOCK(this.selectedCompany._id, formData)
         .then(async (res) => {
-          console.log("res", res);
           this.step = 4;
           this.isStockPutLoading = false;
           this.isStockPutError = false;
