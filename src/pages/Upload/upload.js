@@ -11,6 +11,7 @@ export default {
       lastModifiedDate: null, //date
       records: []
     },
+    file: null,
     company_id: null,
     companies: [],
     step: 1,
@@ -48,18 +49,24 @@ export default {
   methods: {
     GET_COMPANY(id) {
       return http(`/companies?company_id=${id}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
         method: "GET"
       });
     },
     GET_COMPANIES() {
       return http(`/companies`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
         method: "GET"
       });
     },
-    INSERT_STOCK(company_id, stock_data) {
+    INSERT_STOCK(company_id, formData) {
       return http(`/stock?company_id=${company_id}`, {
         method: "PUT",
-        body: JSON.stringify(stock_data)
+        body: formData
       });
     },
 
@@ -83,6 +90,8 @@ export default {
       this.step = 2;
       this.error = "";
       this.reqError = "";
+
+      this.file = f;
 
       if (f) {
         let r = new FileReader();
@@ -128,9 +137,11 @@ export default {
       this.error = "";
       this.reqError = "";
 
-      this.INSERT_STOCK(this.selectedCompany._id, this.stock)
+      const formData = new FormData();
+      formData.append("file", this.file);
+
+      this.INSERT_STOCK(this.selectedCompany._id, formData)
         .then(async (res) => {
-          console.log("res", res);
           this.step = 4;
           this.isStockPutLoading = false;
           this.isStockPutError = false;

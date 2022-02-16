@@ -5,9 +5,6 @@ export function http(url = "", options = {}) {
     ? process.env.VUE_APP_API_BASE_URI
     : "https://booqnly-stockr.herokuapp.com";
   return fetch(`${baseURL}/api/v1${url}`, {
-    headers: {
-      "Content-Type": "application/json"
-    },
     ...options
   }).then(async (response) => {
     if (!response.ok) {
