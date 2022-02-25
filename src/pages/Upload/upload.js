@@ -103,24 +103,18 @@ export default {
             type: "binary"
           });
 
-          let records = [];
-
-          workbook.SheetNames.forEach(function (sheetName) {
-            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-              // header: 1,
-              // dateNF: "FMT 14",
-              raw: false,
-              blankrows: false
-            });
-
-            if (roa.length) records = roa;
+          var roa = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {
+            // header: 1,
+            // dateNF: "FMT 14",
+            raw: false,
+            blankrows: false
           });
 
           // in case something falls over, we still need error handling
-          if (records.length > 0) {
+          if (roa.length > 0) {
             this.stock = {
               lastModifiedDate: fileLastModified,
-              records
+              records: roa
             };
             this.step = 3;
           }
